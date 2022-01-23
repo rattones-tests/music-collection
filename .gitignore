@@ -6,3 +6,6 @@ configs/nginx/logs
 
 # removing vendor's folder - it's installed by composer install 
 backend/vendor
+
+# removindo node-modules folder - it's installed by npm install
+frontend/node_modules
