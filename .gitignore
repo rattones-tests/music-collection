@@ -1,2 +1,5 @@
-# adding to git ignore only database 
+# adding to git ignore to database 
 database
+
+# php-fpm logs
+configs/nginx/logs
