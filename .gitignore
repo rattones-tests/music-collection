@@ -3,3 +3,6 @@ database
 
 # php-fpm logs
 configs/nginx/logs
+
+# removing vendor's folder - it's installed by composer install 
+backend/vendor
