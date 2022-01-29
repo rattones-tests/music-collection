@@ -1,7 +1,24 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
+import axios from "axios"
+
 import styled from "styled-components"
 
 function Album() {
+
+  const [ artistList, setArtistList ]= useState([])
+
+  useEffect(()=> {
+    axios.get('https://moat.ai/api/task', {
+      headers: {
+        Authorization: false,
+        Basic: 'ZGV2ZWxvcGVyOlpHVjJaV3h2Y0dWeQ=='
+      }
+    }).then((response)=> {
+      console.dir(response)
+    }).catch((error)=> {
+      console.dir(error)
+    })
+  }, [])
 
   const FormNewUser= styled.div`
     display: flex;
@@ -53,6 +70,7 @@ function Album() {
 
           <label>Artist</label>
           <select name="artist">
+            <option></option>
             <option>Metallica</option>
             <option>Ramones</option>
             <option>Mega Death</option>
