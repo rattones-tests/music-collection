@@ -16,3 +16,18 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+// users routers
+$router->get('users', 'UsersController@get');
+$router->get('users/{uuid}', 'UsersController@get');
+$router->put('users/{uuid}', 'UsersController@save');
+$router->post('users', 'UsersController@save');
+$router->delete('users/{uuid}', 'UsersController@delete');
+$router->post('login', 'UsersController@login');
+
+// album routers
+$router->get('album', 'AlbumController@get');
+$router->get('album/{id}', 'AlbumController@get');
+$router->put('album/{id}', 'AlbumController@save');
+$router->post('album', 'AlbumController@save');
+$router->delete('album/{id}', 'AlbumController@delete');

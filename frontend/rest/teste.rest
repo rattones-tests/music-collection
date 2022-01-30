@@ -1,3 +1,25 @@
+# @hostname = api.music-collection.local
+# @port = 8390
+# @host = {{hostname}}:{{port}}
+# @contentType = application/json
+
+###
+
 GET https://moat.ai/api/task
   Basic: ZGV2ZWxvcGVyOlpHVjJaV3h2Y0dWeQ==
 
+###
+
+POST http://api.music-collection.local:8390/users HTTP/1.1
+Content-Type: application/json
+
+  {
+    "fullname": "Marcelo Ratton",
+    "username": "rattones",
+    "password": "12333"
+  }
+
+###
+
+GET http://api.music-collection.local:8390 HTTP/1.1
+Content-Type: application/json
