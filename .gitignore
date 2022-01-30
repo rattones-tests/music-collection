@@ -1,11 +1,12 @@
-# adding to git ignore to database 
-database
+# adding to git ignore to database
+database/*
 
 # php-fpm logs
 configs/nginx/logs
 
-# removing vendor's folder - it's installed by composer install 
+# removing vendor's folder - it's installed by composer install
 backend/vendor
 
 # removindo node-modules folder - it's installed by npm install
 frontend/node_modules
+frontend/rest/teste.rest
