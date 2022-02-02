@@ -24,6 +24,7 @@ $router->put('users/{uuid}', 'UsersController@save');
 $router->post('users', 'UsersController@save');
 $router->delete('users/{uuid}', 'UsersController@delete');
 $router->post('login', 'UsersController@login');
+$router->post('validation', 'UsersController@validation');
 
 // album routers
 $router->get('album', 'AlbumController@get');

@@ -2,7 +2,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import Login from '../pages/Login'
-import NewUser from '../pages/NewUser'
+import User from '../pages/User'
 import Dashboard from '../pages/Dashboard'
 import Album from '../pages/Album'
 
@@ -12,7 +12,8 @@ export default function Router() {
       <BrowserRouter>
         <Routes>
           <Route path="/" exact element={<Login />} />
-          <Route path="/newuser" element={<NewUser />} />
+          <Route path="/user" exact element={<User />} />
+          <Route path="/user/:uuid" element={<User />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/album" element={<Album />} />
         </Routes>
