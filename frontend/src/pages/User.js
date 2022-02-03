@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 
 import Api from '../services/Api'
@@ -15,8 +15,6 @@ const User= ()=> {
 
   const navigate= useNavigate()
   const { uuid }= useParams()
-
-  console.dir(uuid)
 
   useEffect(()=> {
     const token= localStorage.getItem('token')
@@ -54,7 +52,7 @@ const User= ()=> {
       console.dir(error)
       // localStorage.clear()
     })
-  }, [])
+  })
 
   const handleSubmit= async (event)=> {
     event.preventDefault()
@@ -148,7 +146,7 @@ const User= ()=> {
           </div>
 
           <div className="actions">
-            <a href="/">Back to login</a>
+            <Link to="/">Back</Link>
             <button id="delete" type="button" onClick={handleDelete}>Delete</button>
             <button type="submit">Save</button>
           </div>

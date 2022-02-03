@@ -16,7 +16,9 @@ class AlbumController extends Controller
     public function __construct()
     {
         //
+        $this->middleware('authorization');
     }
+
 
     public function get (string $id= null) {
         return (is_null($id))?
@@ -28,7 +30,12 @@ class AlbumController extends Controller
     {
         $data= $request->all();
         $data['id']= $id;
-        return DB::table('album')->upsert($data, ['id', 'name', 'artist_id', 'year', 'user_id'], ['name', 'artist_id', 'year']);
+        if (is_null($id)) {
+            $data['created_at']= date('Y-m-d H:i:s');
+        } else {
+            $data['updated_at']= date('Y-m-d H:i:s');
+        }
+        return DB::table('album')->upsert($data, ['name', 'artist_id', 'year', 'user_id'], ['name', 'artist_id', 'year', 'updated_at']);
     }
 
     public function delete (string $id) {

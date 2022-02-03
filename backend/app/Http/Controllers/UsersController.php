@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Validation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -71,13 +72,15 @@ class UsersController extends Controller
     }
 
     public function validation (Request $request) {
-        $token= json_decode(base64_decode($request->input('token')));
+        // $token= json_decode(base64_decode($request->input('token')));
 
-        if ($token->time >= (time()+(12*60*60))) {
-            return response('', 403);
-        }
+        // if ($token->time >= (time()+(12*60*60))) {
+        //     return response('', 403);
+        // }
 
-        $result= DB::table('users')->where('id', $token->v4)->get();
+        // $result= DB::table('users')->where('id', $token->v4)->get();
+
+        $result= Validation::token($request->input('token'));
 
         $this->removePass($result);
 

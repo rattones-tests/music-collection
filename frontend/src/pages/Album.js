@@ -1,93 +1,175 @@
 import React, { useState, useEffect } from "react"
-import axios from "axios"
+import { Link, useNavigate, useParams } from "react-router-dom"
+// import axios from "axios"
+
+import Api from '../services/Api'
 
 import styled from "styled-components"
 
-function Album() {
+import artists from '../assets/artists.json'
+
+
+const Album= ()=> {
 
   const [ artistList, setArtistList ]= useState([])
+  const [ artistId, setArtistId ]= useState('')
+  const [ albumName, setAlbumName ]= useState('')
+  const [ year, setYear ]= useState(0)
+  const [ userId, setUserId ]= useState('')
+
+  const { id }= useParams()
+  const navigate= useNavigate()
+  const token= localStorage.getItem('token')
 
   useEffect(()=> {
-    axios.get('https://moat.ai/api/task', {
-      headers: {
-        Authorization: false,
-        Basic: 'ZGV2ZWxvcGVyOlpHVjJaV3h2Y0dWeQ=='
+
+    if (token === null) {
+      return false
+    }
+
+    Api.post('/validation', {
+      token
+    }).then(response=> {
+      setUserId(response.data[0].id)
+      setArtistList(artists)
+      if (response.data[0].role === 'admin') {
+        document.querySelector('#delete').style.display= 'block'
       }
-    }).then((response)=> {
-      console.dir(response)
-    }).catch((error)=> {
-      console.dir(error)
+    }).catch(error=> {
+      localStorage.clear()
+      navigate('/')
     })
+
+    // CORS error
+    // axios.get('https://moat.ai/api/task', {
+    //   headers: {
+    //     Authorization: false,
+    //     Basic: 'ZGV2ZWxvcGVyOlpHVjJaV3h2Y0dWeQ=='
+    //   }
+    // }).then((response)=> {
+    //   // console.dir(response)
+    //   setArtistList(response.data)
+    // }).catch((error)=> {
+    //   // console.dir(error)
+    //   console.dir(artists)
+    //   setArtistList(artists)
+    // })
+    if (id !== undefined) {
+      Api.get(`/album/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }).then(response=> {
+        // console.dir(response)
+        setArtistId(response.data[0].artist_id)
+        setAlbumName(response.data[0].name)
+        setYear(response.data[0].year)
+      }).catch(error=> {
+        // console.dir(error)
+      })
+    }
   }, [])
 
-  const FormNewUser= styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  const handleSubmit= (event)=> {
+    event.preventDefault()
 
-    form {
-      width: 30%;
-      padding: 5%;
-      background-color: #eef;
-      border: 1px solid #999;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .actions {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-
-    label {
-      margin-top: 5px;
-    }
-
-    button {
-      margin-top: 5px;
-      padding: 0 15px 0 15px;
-    }
-
-    a {
-      margin-top: 5px;
-      text-decoration: none;
-      font-size: 0.8rem;
-      color: #66a;
-      &:hover {
-        color: #339;
+    console.dir([artistId, albumName, year, userId])
+    Api.post('/album', {
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
-    }
-  `
+    },
+    {
+      name: albumName,
+      year: year,
+      artist_id: artistId,
+      user_id: userId
+    }).then(response=> {
+      console.dir(response)
+    }).catch(error=> {
+      console.dir(error)
+    })
+    // navigate("/dashboard")
+  }
+
+  const handleDelete= ()=> {
+
+  }
 
   return (
     <>
       <FormNewUser>
         <h1>Music Collection</h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <h2>Album</h2>
 
           <label>Artist</label>
-          <select name="artist">
+          <select name="artist" value={artistId} onChange={event=> setArtistId(event.target.value)}>
             <option></option>
-            <option>Metallica</option>
-            <option>Ramones</option>
-            <option>Mega Death</option>
-            <option>Motorhead</option>
+            {artistList.map(item=> (
+              <option key={item.id} id={item.id} value={item.id}>{item.name}</option>
+            ))}
           </select>
           <label>Album name</label>
-          <input type="text" name="albumname" />
+          <input type="text" name="albumname" value={albumName} onChange={event=> setAlbumName(event.target.value)} />
           <label>Year</label>
-          <input type="number" name="year" />
-          <div class="actions">
-            <a href="/dashboard">Back</a>
-            <button type="button">Save</button>
+          <input type="number" name="year" value={year} onChange={event=> setYear(event.target.value)} />
+          <div className="actions">
+            <Link to="/dashboard">Back to dashboard</Link>
+            <button id="delete" type="button" onClick={handleDelete}>Delete</button>
+            <button type="submit">Save</button>
           </div>
           </form>
       </FormNewUser>
     </>
   )
 }
+
+const FormNewUser= styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  form {
+    width: 30%;
+    padding: 5%;
+    background-color: #eef;
+    border: 1px solid #999;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  label {
+    margin-top: 5px;
+  }
+
+  #delete {
+    display: none;
+    background: #f99;
+  }
+
+  button {
+    margin-top: 5px;
+    padding: 0 15px 0 15px;
+    cursor: pointer;
+  }
+
+  a {
+    margin-top: 5px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    color: #66a;
+    &:hover {
+      color: #339;
+    }
+  }
+`
 
 export default Album

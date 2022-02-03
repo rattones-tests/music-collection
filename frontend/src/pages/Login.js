@@ -12,7 +12,7 @@ const Login= ()=> {
 
   const navigate= useNavigate()
 
-  useEffect((navigate)=> {
+  useEffect(()=> {
     const token= localStorage.getItem('token')
 
     if (token === null) {
@@ -26,7 +26,7 @@ const Login= ()=> {
     }).catch(error=> {
       // console.dir(error)
     })
-  }, [])
+  })
 
   const handleSubmit= (event)=> {
     event.preventDefault()
@@ -46,7 +46,7 @@ const Login= ()=> {
       }
     }).catch(error=> {
       if (error.response.status === 401) {
-        alert('Invalid username and password')
+        alert("Sorry, we couldn't find an account with this username. Please check you're using the right username and try again.")
       }
     })
   }
@@ -62,7 +62,7 @@ const Login= ()=> {
           <label>Password</label>
           <input type="password" name="password" value={password} onChange={event=> setPassword(event.target.value)} />
           <div className="actions">
-            <Link className="" to="/newuser">Create new user</Link>
+            <Link to="/user">Create new user</Link>
             <button type="submit">Enter</button>
           </div>
         </form>

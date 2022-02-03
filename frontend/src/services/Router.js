@@ -15,7 +15,8 @@ export default function Router() {
           <Route path="/user" exact element={<User />} />
           <Route path="/user/:uuid" element={<User />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/album" element={<Album />} />
+          <Route path="/album" exact element={<Album />} />
+          <Route path="/album/:id" element={<Album />} />
         </Routes>
       </BrowserRouter>
   )
