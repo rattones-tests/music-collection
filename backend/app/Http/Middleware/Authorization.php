@@ -18,12 +18,15 @@ class Authorization
     {
         $header= $request->header('Authorization');
         $header= explode(' ', $header);
+        if (!isset($header[1])) {
+            return response('Token did not sent', 401);
+        }
         $token= $header[1];
 
         $result= Validation::token($token);
 
         $response = $next($request);
 
-        return (count($result) === 1)? $response: response('Unauthorized', 401);
+        return (is_null($result))? response('Unauthorized', 401): $response;
     }
 }

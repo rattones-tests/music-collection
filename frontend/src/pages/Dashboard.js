@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-export default function Dashboard() {
+const Dashboard= ()=> {
+
+  useEffect(()=> {
+
+  })
+
   return (
     <h1>Dashboard</h1>
   )
 }
+
+export default Dashboard

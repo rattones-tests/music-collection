@@ -36,8 +36,8 @@ const Album= ()=> {
         document.querySelector('#delete').style.display= 'block'
       }
     }).catch(error=> {
-      localStorage.clear()
-      navigate('/')
+      // localStorage.clear()
+      // navigate('/')
     })
 
     // CORS error
@@ -93,7 +93,20 @@ const Album= ()=> {
   }
 
   const handleDelete= ()=> {
+    if (id === '') {
+      return false
+    }
 
+    Api.delete(`/album/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
+    ).then(response=> {
+      console.dir(response)
+    }).catch(error=> {
+      console.dir(error)
+    })
   }
 
   return (
