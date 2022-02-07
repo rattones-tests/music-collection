@@ -13,16 +13,20 @@ docker-compose up -d
 
 ### setting up database
 * create database tables
-```base
+```bash
 docker exec -it moat-tools php ./backend/artisan migrate
 ```
 
 * create first admin user
-```base
+```bash
 docker exec -it moat-tools php ./backend/artisan db:seed --class=UserSeeder
 ```
 
 ### running frontend dev
-```base
+```bash
 docker exec -it moat-tools npm start --prefix ./frontend
+```
+### buildind fronted production
+```bash
+docker exec -it moat-tools npm run build --prefix ./frontend
 ```
