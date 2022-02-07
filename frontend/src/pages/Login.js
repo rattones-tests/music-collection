@@ -34,6 +34,7 @@ const Login= ()=> {
     Api.post('/login', {
       username, password
     }).then(response=> {
+      console.dir(response)
       if (response.status === 200) {
         let token= {
           v4: response.data.id,

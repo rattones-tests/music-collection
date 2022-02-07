@@ -36,24 +36,10 @@ const Album= ()=> {
         document.querySelector('#delete').style.display= 'block'
       }
     }).catch(error=> {
-      // localStorage.clear()
-      // navigate('/')
+      localStorage.clear()
+      navigate('/')
     })
 
-    // CORS error
-    // axios.get('https://moat.ai/api/task', {
-    //   headers: {
-    //     Authorization: false,
-    //     Basic: 'ZGV2ZWxvcGVyOlpHVjJaV3h2Y0dWeQ=='
-    //   }
-    // }).then((response)=> {
-    //   // console.dir(response)
-    //   setArtistList(response.data)
-    // }).catch((error)=> {
-    //   // console.dir(error)
-    //   console.dir(artists)
-    //   setArtistList(artists)
-    // })
     if (id !== undefined) {
       Api.get(`/album/${id}`, {
         headers: {
@@ -73,19 +59,35 @@ const Album= ()=> {
   const handleSubmit= (event)=> {
     event.preventDefault()
 
+    let saveEndPoint= (id === undefined)? '/album':  `/album/${id}`
+
     console.dir([artistId, albumName, year, userId])
-    Api.post('/album', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    },
-    {
+    Api.post(saveEndPoint,     {
       name: albumName,
       year: year,
       artist_id: artistId,
       user_id: userId
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     }).then(response=> {
       console.dir(response)
+      let msg= ''
+      switch (response.status) {
+        case 200:
+          msg= 'Album updated'
+          break;
+        case 201:
+          msg= 'Album created'
+          break;
+        default:
+          msg= ''
+          break;
+      }
+      if  (msg !== '') {
+        alert(msg)
+      }
     }).catch(error=> {
       console.dir(error)
     })
@@ -103,7 +105,8 @@ const Album= ()=> {
       }
     }
     ).then(response=> {
-      console.dir(response)
+      alert('Album deleted')
+      navigate('/dashboard')
     }).catch(error=> {
       console.dir(error)
     })

@@ -29,6 +29,6 @@ $router->post('validation', 'UsersController@validation');
 // album routers
 $router->get('album', 'AlbumController@get');
 $router->get('album/{id}', 'AlbumController@get');
-$router->put('album/{id}', 'AlbumController@save');
 $router->post('album', 'AlbumController@save');
+$router->post('album/{id}', 'AlbumController@save');
 $router->delete('album/{id}', 'AlbumController@delete');

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Validation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class AlbumController extends Controller
 {
@@ -23,13 +23,21 @@ class AlbumController extends Controller
     /**
      * get a list or a single album
      *
-     * @param  string   [$id] album id to return
+     * @param  Request  $request request params
+     * @param  string   [$id]    album id to return
      * @return Response
      */
-    public function get (string $id= null) {
-        return (is_null($id))?
-            DB::table('album')->get():
+    public function get (Request $request, string $id= null) {
+        $token= $request->header('Authorization');
+        $token= explode(' ', $token);
+        $token= Validation::token($token[1]);
+// return response()->json($token, 400);
+
+        $result= (is_null($id))?
+            DB::table('album')->where('user_id', $token->id)->get():
             DB::table('album')->where('id', $id)->get();
+
+        return (count($result) === 0)? response('Album list is empty', 204): response()->json($result, 200);
     }
 
 
@@ -46,10 +54,18 @@ class AlbumController extends Controller
         $data['id']= $id;
         if (is_null($id)) {
             $data['created_at']= date('Y-m-d H:i:s');
+            $action= 'create';
         } else {
             $data['updated_at']= date('Y-m-d H:i:s');
+            $action= 'update';
         }
-        return DB::table('album')->upsert($data, ['name', 'artist_id', 'year', 'user_id'], ['name', 'artist_id', 'year', 'updated_at']);
+        $result= DB::table('album')->upsert($data,
+                    ['name', 'artist_id', 'year', 'user_id'],
+                    ['name', 'artist_id', 'year', 'updated_at']);
+        return ($action === 'create')?
+                (($result === 1)? response()->json($data, 201): response('Album do not created, album already exists', 409)):
+                (($result >= 1)? response()->json($data, 200): response('Nothing to update', 202));
+
     }
 
 
