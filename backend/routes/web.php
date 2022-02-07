@@ -20,7 +20,7 @@ $router->get('/', function () use ($router) {
 // users routers
 $router->get('users', 'UsersController@get');
 $router->get('users/{uuid}', 'UsersController@get');
-$router->put('users/{uuid}', 'UsersController@save');
+$router->post('users/{uuid}', 'UsersController@save');
 $router->post('users', 'UsersController@save');
 $router->delete('users/{uuid}', 'UsersController@delete');
 $router->post('login', 'UsersController@login');

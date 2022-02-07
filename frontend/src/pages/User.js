@@ -52,7 +52,7 @@ const User= ()=> {
       console.dir(error)
       // localStorage.clear()
     })
-  })
+  }, [])
 
   const handleSubmit= async (event)=> {
     event.preventDefault()
@@ -78,11 +78,20 @@ const User= ()=> {
       return false
     }
 
-    Api.post('users', {
+    let userEndPoint= (uuid === undefined)? '/users': `/users/${uuid}`
+
+    Api.post(userEndPoint, {
       fullname, username, password, role
     }).then(response=> {
-      if (response.status === 201) {
-        alert('User created succefully')
+      switch (response.status) {
+        case 201:
+          alert('User created')
+          break
+        case 200:
+          alert('User updated')
+          break
+        default:
+          break
       }
     }).catch(error=> {
       // console.dir(error)
